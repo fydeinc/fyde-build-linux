@@ -24,9 +24,10 @@ ARG ANDROID_NDK=https://dl.google.com/android/repository/android-ndk-r18b-linux-
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && \
+RUN apt-get update &&   \
     apt-get install -qy \
     build-essential     \
+    clang               \
     curl                \
     git                 \
     python              \
