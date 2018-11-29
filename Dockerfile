@@ -26,10 +26,12 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update &&   \
     apt-get install -qy \
+    autoconf            \
     build-essential     \
     clang               \
     curl                \
     git                 \
+    libtool             \
     python              \
     unzip               \
     wget                
