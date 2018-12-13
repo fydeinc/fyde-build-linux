@@ -17,24 +17,36 @@
 
 FROM ubuntu:16.04
 
-MAINTAINER Ricardo Martins <ricardo@fyde.com>
+LABEL maintainer="Ricardo Martins <ricardo@fyde.com>"
 
 ARG CMAKE_URL=https://github.com/Kitware/CMake/releases/download/v3.13.0/cmake-3.13.0-Linux-x86_64.tar.gz
 ARG ANDROID_NDK=https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
+ARG GITLFS_URL=https://packagecloud.io/github/git-lfs/ubuntu/
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update &&   \
-    apt-get install -qy \
-    autoconf            \
-    build-essential     \
-    clang               \
-    curl                \
-    git                 \
-    libtool             \
-    python              \
-    unzip               \
-    wget                
+RUN apt-get update &&           \
+    apt-get upgrade -qy &&      \
+    apt-get install -qy         \
+    autoconf                    \
+    build-essential             \
+    clang                       \
+    curl                        \
+    git                         \
+    libtool                     \
+    python                      \
+    unzip                       \
+    wget                        \
+    software-properties-common  \
+    apt-transport-https         \
+    gnupg
+
+RUN add-apt-repository -y ppa:git-core/ppa &&   \
+    apt-get update
+
+RUN printf "deb ${GITLFS_URL} xenial main\ndeb-src ${GITLFS_URL} xenial main" > /etc/apt/sources.list.d/github_git-lfs.list
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 37BBEE3F7AD95B3F
+RUN apt-get update && apt-get install -qy git-lfs
 
 # Install CMake
 RUN wget ${CMAKE_URL} -O - \
