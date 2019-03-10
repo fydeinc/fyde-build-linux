@@ -15,15 +15,27 @@
 # limitations under the License.                                            #
 #############################################################################
 
-FROM ubuntu:16.04
-
-LABEL maintainer="Ricardo Martins <ricardo@fyde.com>"
-
-ARG CMAKE_URL=https://github.com/Kitware/CMake/releases/download/v3.13.0/cmake-3.13.0-Linux-x86_64.tar.gz
-ARG ANDROID_NDK=https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip
-ARG GITLFS_URL=https://packagecloud.io/github/git-lfs/ubuntu/
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update &&           \
+    apt-get upgrade -qy &&      \
+    apt-get install -qy         \
+    curl                        \
+    gnupg
+
+# LLVM 7
+RUN curl -sS https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main" > /etc/apt/sources.list.d/llvm7.list
+RUN echo "deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main" >> /etc/apt/sources.list.d/llvm7.list
+
+# Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+# Node.js
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 
 RUN apt-get update &&           \
     apt-get upgrade -qy &&      \
@@ -31,38 +43,20 @@ RUN apt-get update &&           \
     autoconf                    \
     build-essential             \
     clang                       \
+    clang-7                     \
     curl                        \
+    gcc-multilib                \
     git                         \
     libtool                     \
-    python                      \
+    nodejs                      \
+    python3                     \
+    python3-pip                 \
     unzip                       \
-    wget                        \
-    software-properties-common  \
-    apt-transport-https         \
-    gnupg
-
-RUN add-apt-repository -y ppa:git-core/ppa &&   \
-    apt-get update
-
-RUN printf "deb ${GITLFS_URL} xenial main\ndeb-src ${GITLFS_URL} xenial main" > /etc/apt/sources.list.d/github_git-lfs.list
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 37BBEE3F7AD95B3F
-RUN apt-get update && apt-get install -qy git-lfs
+    yarn
 
 # Install CMake
-RUN wget ${CMAKE_URL} -O - \
+RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-Linux-x86_64.tar.gz \
     | tar -C /usr/local --strip-components=1 -xvzf -
 
-# Install Ninja.
-RUN git clone git://github.com/martine/ninja.git && \
-      cd ninja && \
-      git checkout release && \
-      ./configure.py --bootstrap && \
-      mv ninja /usr/local/bin && \
-      ln -fs ninja /usr/local/bin/ninja-build && \
-      cd .. && \
-      rm -rf ninja && \
-      chmod 0755 /usr/local/bin/ninja
-
-# Android NDK.
-RUN wget ${ANDROID_NDK} -O /opt/android.zip && cd /opt && unzip android.zip && rm -rf android.zip
-RUN ln -s /opt/android-ndk-* /opt/android-ndk
+# Install Conan
+RUN pip3 install conan==1.11.2
