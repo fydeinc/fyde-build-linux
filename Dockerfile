@@ -45,6 +45,7 @@ RUN apt-get update &&           \
     clang                       \
     clang-7                     \
     curl                        \
+    g++-multilib                \
     gcc-multilib                \
     git                         \
     libtool                     \
