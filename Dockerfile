@@ -25,10 +25,12 @@ RUN apt-get update &&           \
     curl                        \
     gnupg
 
-# LLVM 7
+# LLVM.
 RUN curl -sS https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main" > /etc/apt/sources.list.d/llvm7.list
 RUN echo "deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main" >> /etc/apt/sources.list.d/llvm7.list
+RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main" > /etc/apt/sources.list.d/llvm8.list
+RUN echo "deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main" >> /etc/apt/sources.list.d/llvm.list
 
 # Yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -44,6 +46,7 @@ RUN apt-get update &&           \
     build-essential             \
     clang                       \
     clang-7                     \
+    clang-8                     \
     curl                        \
     g++-multilib                \
     gcc-multilib                \
@@ -56,7 +59,7 @@ RUN apt-get update &&           \
     yarn
 
 # Install CMake
-RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.13.4/cmake-3.13.4-Linux-x86_64.tar.gz \
+RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-Linux-x86_64.tar.gz \
     | tar -C /usr/local --strip-components=1 -xvzf -
 
 # Install Conan
