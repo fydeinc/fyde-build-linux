@@ -63,4 +63,4 @@ RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3
     | tar -C /usr/local --strip-components=1 -xvzf -
 
 # Install Conan
-RUN pip3 install conan==1.11.2
+RUN pip3 install conan==1.14.1
