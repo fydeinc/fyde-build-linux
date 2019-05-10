@@ -44,6 +44,7 @@ RUN apt-get update &&           \
     apt-get install -qy         \
     autoconf                    \
     build-essential             \
+    ccache                      \
     clang                       \
     clang-7                     \
     clang-8                     \
