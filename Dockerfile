@@ -19,6 +19,8 @@ FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN dpkg --add-architecture i386
+
 RUN apt-get update &&           \
     apt-get upgrade -qy &&      \
     apt-get install -qy         \
@@ -52,6 +54,7 @@ RUN apt-get update &&           \
     g++-multilib                \
     gcc-multilib                \
     git                         \
+    libc6-dev:i386              \
     libtool                     \
     nodejs                      \
     python3                     \
@@ -60,8 +63,8 @@ RUN apt-get update &&           \
     yarn
 
 # Install CMake
-RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.14.1/cmake-3.14.1-Linux-x86_64.tar.gz \
+RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5-Linux-x86_64.tar.gz \
     | tar -C /usr/local --strip-components=1 -xvzf -
 
 # Install Conan
-RUN pip3 install conan==1.14.1
+RUN pip3 install conan
