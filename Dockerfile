@@ -1,5 +1,5 @@
 #############################################################################
-# Copyright 2018 Fyde, Inc.                                                 #
+# Copyright 2019 Fyde, Inc.                                                 #
 #############################################################################
 #                                                                           #
 # Licensed under the Apache License, Version 2.0 (the "License");           #
@@ -15,11 +15,9 @@
 # limitations under the License.                                            #
 #############################################################################
 
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 
 ENV DEBIAN_FRONTEND noninteractive
-
-RUN dpkg --add-architecture i386
 
 RUN apt-get update &&           \
     apt-get upgrade -qy &&      \
@@ -29,42 +27,32 @@ RUN apt-get update &&           \
 
 # LLVM.
 RUN curl -sS https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main" > /etc/apt/sources.list.d/llvm7.list
-RUN echo "deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-7 main" >> /etc/apt/sources.list.d/llvm7.list
-RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main" > /etc/apt/sources.list.d/llvm8.list
-RUN echo "deb-src http://apt.llvm.org/bionic/ llvm-toolchain-bionic-8 main" >> /etc/apt/sources.list.d/llvm.list
-
-# Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
-# Node.js
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main" > /etc/apt/sources.list.d/llvm9.list
+RUN echo "deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main" >> /etc/apt/sources.list.d/llvm9.list
 
 RUN apt-get update &&           \
     apt-get upgrade -qy &&      \
     apt-get install -qy         \
     autoconf                    \
     build-essential             \
-    ccache                      \
-    clang                       \
-    clang-7                     \
-    clang-8                     \
+    clang-9                     \
     curl                        \
-    g++-multilib                \
-    gcc-multilib                \
+    libc++-9-dev                \
+    libc++abi-9-dev             \
+    g++                         \
+    gcc                         \
     git                         \
-    libc6-dev:i386              \
     libtool                     \
-    nodejs                      \
     python3                     \
     python3-pip                 \
-    unzip                       \
-    yarn
+    quilt                       \
+    unzip
+
+RUN ln -fs /usr/bin/clang-9 /usr/bin/clang
 
 # Install CMake
-RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5-Linux-x86_64.tar.gz \
-    | tar -C /usr/local --strip-components=1 -xvzf -
+RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.15.4/cmake-3.15.4-Linux-x86_64.tar.gz \
+    | tar -C /usr/local --strip-components=1 -xzf -
 
 # Install Conan
 RUN pip3 install conan
