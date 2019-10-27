@@ -27,18 +27,18 @@ RUN apt-get update &&           \
 
 # LLVM.
 RUN curl -sS https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main" > /etc/apt/sources.list.d/llvm9.list
-RUN echo "deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-9 main" >> /etc/apt/sources.list.d/llvm9.list
+RUN echo "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main" > /etc/apt/sources.list.d/llvm8.list
+RUN echo "deb-src http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main" >> /etc/apt/sources.list.d/llvm8.list
 
 RUN apt-get update &&           \
     apt-get upgrade -qy &&      \
     apt-get install -qy         \
     autoconf                    \
     build-essential             \
-    clang-9                     \
+    clang-8                     \
     curl                        \
-    libc++-9-dev                \
-    libc++abi-9-dev             \
+    libc++-8-dev                \
+    libc++abi-8-dev             \
     g++                         \
     gcc                         \
     git                         \
@@ -48,7 +48,7 @@ RUN apt-get update &&           \
     quilt                       \
     unzip
 
-RUN ln -fs /usr/bin/clang-9 /usr/bin/clang
+RUN ln -fs /usr/bin/clang-8 /usr/bin/clang
 
 # Install CMake
 RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.15.4/cmake-3.15.4-Linux-x86_64.tar.gz \
