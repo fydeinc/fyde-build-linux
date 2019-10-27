@@ -50,6 +50,8 @@ RUN apt-get update &&           \
 
 RUN ln -fs /usr/bin/clang-8 /usr/bin/clang
 
+RUN ln -fs python3 /usr/bin/python
+
 # Install CMake
 RUN curl -sSL https://github.com/Kitware/CMake/releases/download/v3.15.4/cmake-3.15.4-Linux-x86_64.tar.gz \
     | tar -C /usr/local --strip-components=1 -xzf -
