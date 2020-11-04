@@ -23,7 +23,9 @@ RUN apt-get update &&           \
     apt-get upgrade -qy &&      \
     apt-get install -qy         \
     curl                        \
-    gnupg
+    gnupg			\
+    apt-transport-https 	\
+    ca-certificates
 
 # LLVM.
 RUN curl -sS https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
