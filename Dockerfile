@@ -39,6 +39,7 @@ RUN apt-get update &&           \
     curl                        \
     libc++-8-dev                \
     libc++abi-8-dev             \
+    libssl-dev                  \
     g++                         \
     gcc                         \
     git                         \
